@@ -16,13 +16,20 @@ export default defineNuxtConfig({
     '@nuxtjs/stylelint-module',
     '@nuxtjs/device',
     '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     '@unocss/nuxt',
     '@vueuse/nuxt',
     '@element-plus/nuxt',
     '@nuxt/icon',
     'nuxt-swiper',
+    'nuxt-auth-utils',
   ],
-
+  runtimeConfig: {
+    public: {
+      api: process.env.API,
+    },
+  },
+  piniaPluginPersistedstate: { storage: 'localStorage' },
   stylelint: { lintOnStart: false },
   css: ['the-new-css-reset/css/reset.css', '@/assets/global.styl'],
 
