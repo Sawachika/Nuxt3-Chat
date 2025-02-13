@@ -21,6 +21,7 @@ export const useUserStore = defineStore('User', {
       if (!data.value) return
       this.token = data.value.refresh_token
       useDialogStore().set({ sms: false })
+      useRecommendStore().getLists()
     },
     async logout() {
       const { error } = await useApi<ResponseLogin>('/v2/auth/logout', { method: 'POST', body: { refresh_token: this.token } })

@@ -39,6 +39,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.9.0",
     "element-plus": "^2.9.3",
+    "moment": "^2.30.1",
     "pinia": "^2.3.1",
     "pinia-plugin-persistedstate": "^4.2.0",
     "the-new-css-reset": "^1.11.3",
