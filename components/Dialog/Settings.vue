@@ -34,7 +34,7 @@ ElDialog(
     ElButton.ms-auto(type="primary" @click="submit(formRef)") Submit
 </template>
 
-<script setup lang="tsx">
+<script setup lang="ts">
 import type { FormInstance } from 'element-plus'
 const dialogStore = useDialogStore()
 const userStore = useUserStore()
