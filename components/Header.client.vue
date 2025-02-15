@@ -1,8 +1,9 @@
 <template lang="pug">
-header.fixed.flex.w-full.p-4
-  h1.font-bold.text-2xl Chat
+header.fixed.flex.gap-4.w-full.p-4
+  Icon.text-3xl.cursor-pointer(name="material-symbols-light:menu-rounded" @click="visibleMenu = true")
+  NuxtLinkLocale.font-bold.text-2xl(to="/") Nuxt3-Chat
   ElDropdown.ms-auto(v-if="userStore.token" trigger="click")
-    Icon.text-3xl.cursor-pointer(name="material-symbols-light:menu-rounded")
+    img.w-8.h-8.rounded-full.cursor-pointer(:src="userStore.profile.user.photos?.[0].url" @error="$event.target.src = '/image/avatar.jpg'")
     template(#dropdown)
       ElDropdownMenu
         ElDropdownItem(@click="useDialogStore().set({ profile: true })") Profile
@@ -15,6 +16,7 @@ header.fixed.flex.w-full.p-4
     round
     @click="useDialogStore().set({ login: true })"
   ) Log in
+DrawerMenu(v-model="visibleMenu")
 DialogLogin
 DialogProfile
 DialogSettings
@@ -22,6 +24,7 @@ DialogSettings
 
 <script setup lang="ts">
 const userStore = useUserStore()
+const visibleMenu = ref(false)
 </script>
 
 <style scoped lang="stylus">

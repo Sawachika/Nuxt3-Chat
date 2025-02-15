@@ -40,7 +40,9 @@ export const useUserStore = defineStore('User', {
     },
     async logout() {
       const { error } = await useApi<ResponseLogin>('/v2/auth/logout', { method: 'POST', body: { refresh_token: this.token } })
-      if (!error.value) this.$reset()
+      if (error.value) return
+      this.$reset()
+      navigateTo('/')
     },
     async getProfile() {
       const { data } = await useApi<RequestProfile>('/v2/profile')

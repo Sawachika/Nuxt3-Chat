@@ -14,6 +14,7 @@
     "@nuxt/eslint": "^0.7.5",
     "@nuxt/icon": "^1.10.3",
     "@nuxtjs/device": "^3.2.4",
+    "@nuxtjs/i18n": "^9.2.0",
     "@nuxtjs/stylelint-module": "^5.2.0",
     "@stylistic/eslint-plugin": "^3.0.0",
     "@unocss/extractor-pug": "^65.4.3",

@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxtjs/stylelint-module',
+    '@nuxtjs/i18n',
     '@nuxtjs/device',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
@@ -32,7 +33,12 @@ export default defineNuxtConfig({
   piniaPluginPersistedstate: { storage: 'localStorage' },
   stylelint: { lintOnStart: false },
   css: ['the-new-css-reset/css/reset.css', '@/assets/global.styl'],
-
+  i18n: {
+    strategy: 'no_prefix',
+    restructureDir: '',
+    locales: ['en', 'zh-Hant'],
+    defaultLocale: 'en',
+  },
   unocss: {
     attributify: true,
     icons: true,

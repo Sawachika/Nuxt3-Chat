@@ -8,4 +8,7 @@
     "stylus",
     "vue",
   ],
+  "i18n-ally.localesPaths": [
+    "locales"
+  ],
 }

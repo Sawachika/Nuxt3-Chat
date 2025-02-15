@@ -9,17 +9,23 @@
     round
     @click="useDialogStore().set({ login: true })"
   ) Create account
-.container.grid.grid-cols-2.gap-4.mx-auto.p-4.pt-16(v-else)
-  img.aspect-square.object-fit.rounded-xl(:src="user.user.photos[0].url" @error="$event.target.src = '/image/avatar.jpg'")
+.container.grid.gap-4.mx-auto.p-4.pt-16(v-else class="md:grid-cols-2")
+  img.aspect-square.object-fit.rounded-xl(:src="user.user?.photos[0].url" @error="$event.target.src = '/image/avatar.jpg'")
   .flex.flex-col.gap-4.aspect-square
     p
       span {{ user.user.name }},
       span.ms-2 {{ moment().diff(moment(user.user.birth_date), 'years') }}
     p {{ user.user.bio }}
-    .interact.flex.gap-4.mt-auto
-      Icon.text-red(name="material-symbols:close-rounded" @click="pass(user.user._id)")
-      Icon.text-green(name="material-symbols:check-rounded" @click="like(user.user._id)")
-      Icon.text-blue(name="material-symbols-light:favorite-rounded" @click="superLike(user.user._id)")
+    .interact.inline-grid.grid-cols-3.place-items-center.gap-8.mt-auto.mx-auto
+      .grid.justify-items-center.gap-2.cursor-pointer(@click="pass(user.user._id)")
+        Icon.text-red(name="material-symbols:close-rounded")
+        span Skip
+      .grid.justify-items-center.gap-2.cursor-pointer(@click="like(user.user._id)")
+        Icon.text-green(name="material-symbols:check-rounded")
+        span Like
+      .grid.justify-items-center.gap-2.cursor-pointer(@click="superLike(user.user._id)")
+        Icon.text-blue(name="material-symbols-light:favorite-rounded")
+        span Super Like
 </template>
 
 <script setup lang="ts">
@@ -58,6 +64,6 @@ async function superLike(id: string) {
 </style>
 <style scoped lang="stylus">
 .interact .iconify
-  @apply p-1 rounded-full bg-hex-8881 text-4xl cursor-pointer
+  @apply p-1 rounded-full bg-hex-8881 text-4xl
   box-shadow 0 0 8px 2px
 </style>
