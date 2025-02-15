@@ -3,10 +3,15 @@
   Icon.text-12(name="logos:nuxt")
 .grid.place-content-center.gap-2.min-h-100vh(v-else-if="!userStore.token")
   h1.font-bold.text-2xl.text-center Nuxt3 Chat
-  ElButton(type="primary" round @click="useDialogStore().set({ login: true })") Create account
+  ElButton(
+    class="animate-[shock_1s_ease-out_infinite]"
+    type="primary"
+    round
+    @click="useDialogStore().set({ login: true })"
+  ) Create account
 .container.grid.grid-cols-2.gap-4.mx-auto.p-4.pt-16(v-else)
-  img.rounded-xl(:src="user.user.photos[0].url" @error="$event.target.src = '/image/avatar.jpg'")
-  .flex.flex-col.gap-4
+  img.aspect-square.object-fit.rounded-xl(:src="user.user.photos[0].url" @error="$event.target.src = '/image/avatar.jpg'")
+  .flex.flex-col.gap-4.aspect-square
     p
       span {{ user.user.name }},
       span.ms-2 {{ moment().diff(moment(user.user.birth_date), 'years') }}
@@ -21,14 +26,14 @@
 import moment from 'moment'
 const isLoading = ref(true)
 const userStore = useUserStore()
-const { origin, lists } = useRecommendStore()
+const { origin, lists } = storeToRefs(useRecommendStore())
 const user = ref({})
 
 onMounted(() => isLoading.value = false)
 if (userStore.token) nextUser()
 function nextUser() {
-  user.value = lists.splice(0, 1)[0]
-  if (lists.length < 1) lists.push(...origin)
+  user.value = lists.value.splice(0, 1)[0]
+  if (lists.value.length < 1) lists.value.push(...origin.value)
 }
 async function pass(id: string) {
   const { data } = await useApi(`/pass/${id}`)
@@ -44,6 +49,13 @@ async function superLike(id: string) {
 }
 </script>
 
+<style lang="stylus">
+@keyframes {shock}
+  0%
+    box-shadow 0 0 2px 4px #409effa6
+  100%
+    box-shadow 0 0 4px 8px #409eff26
+</style>
 <style scoped lang="stylus">
 .interact .iconify
   @apply p-1 rounded-full bg-hex-8881 text-4xl cursor-pointer

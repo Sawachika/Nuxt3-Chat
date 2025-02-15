@@ -1,3 +1,7 @@
 export default defineNuxtPlugin(async () => {
-  if (useUserStore().token) await useRecommendStore().getLists()
+  const userStore = useUserStore()
+  if (userStore.token) {
+    userStore.getProfile()
+    useRecommendStore().getLists()
+  }
 })

@@ -102,6 +102,7 @@ export default [
         age_filter_min: 0,
         autoplay_video: true,
         birth_date: '1990/01/01',
+        bio: '\uD83D\uDD34⚪️⚫️♥️',
         create_date: '2025/01/01',
         crm_id: 'string',
         discoverable: true,
@@ -146,7 +147,8 @@ export default [
         ping_time: 'string',
         pos: {
           lat: 0,
-          lon: 0
+          lon: 0,
+          city: 'Japan Tokyo'
         },
         schools: [
           {}
@@ -157,5 +159,11 @@ export default [
         _id: 'string'
       }
     },
+  })),
+  http.post('/v2/profile', async ({ request }) => HttpResponse.json({
+    meta: {
+      status: 0
+    },
+    data: await request.json()
   })),
 ]
