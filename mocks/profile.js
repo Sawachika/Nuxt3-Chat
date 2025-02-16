@@ -140,7 +140,7 @@ export default [
                 height: 0
               }
             ],
-            url: 'string'
+            url: '/image/avatar.jpg'
           }
         ],
         photos_processing: true,

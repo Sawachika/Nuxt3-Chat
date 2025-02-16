@@ -39,8 +39,11 @@ import type { FormInstance } from 'element-plus'
 const dialogStore = useDialogStore()
 const userStore = useUserStore()
 const formRef = ref()
-const { profile } = userStore
-const form = reactive({ account: { ...profile.account }, user: { ...profile.user } })
+const { profile } = storeToRefs(userStore)
+const form = reactive({
+  account: { ...profile.value.account },
+  user: { ...profile.value.user, pos: { ...profile.value.user.pos } }
+})
 const rules = {
   'user.age_filter_min': [{ validator: checkMinAge, trigger: 'blur' }],
   'user.age_filter_max': [{ validator: checkMaxAge, trigger: 'blur' }],
@@ -49,6 +52,13 @@ const rules = {
   'user.distance_filter': [{ required: true, trigger: 'blur', message: 'Required' }],
 }
 
+watch(() => dialogStore.settings, value => {
+  if (!value) return
+  Object.assign(form, {
+    account: { ...profile.value.account },
+    user: { ...profile.value.user, pos: { ...profile.value.user.pos } }
+  })
+})
 function checkMinAge(rule: object, value: number | null, callback: (error?: Error) => void) {
   if (value === null) callback(new Error('Required'))
   else if (value > form.user.age_filter_max) callback(new Error('Must be less than the maximum age'))
@@ -63,15 +73,16 @@ function submit(formRef: FormInstance) {
   formRef.validate(async valid => {
     if (!valid) return
     await userStore.updateProfile(form)
-    Object.assign(profile, userStore.profile)
     dialogStore.set({ settings: false })
     await useRecommendStore().getLists()
     useNuxtApp().$toast.success('Refetch recommended lists')
   })
 }
 async function confirmClose(done: () => void) {
+  if (JSON.stringify(form) === JSON.stringify({ account: { ...profile.value.account }, user: { ...profile.value.user } })) return done()
+
   await ElMessageBox.confirm('Abandon this modification?')
-  Object.assign(form, { account: { ...profile.account }, user: { ...profile.user } })
+  Object.assign(form, { account: { ...profile.value.account }, user: { ...profile.value.user } })
   done()
 }
 </script>

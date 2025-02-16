@@ -1,11 +1,12 @@
-type Request = {
-  results: Record<string, string>[]
-}
+type User = { [key: string]: Record<string, string> }
+type Results = User[]
+type Request = { results: Results }
 
 export const useRecommendStore = defineStore('Recommend', {
   state: () => ({
-    origin: [] as Record<string, string>[],
-    lists: [] as Record<string, string>[],
+    origin: [] as Results,
+    lists: [] as Results,
+    user: {} as User,
   }),
   actions: {
     async getLists() {
@@ -13,7 +14,12 @@ export const useRecommendStore = defineStore('Recommend', {
       if (!data.value) return
       this.origin = [...data.value.results]
       this.lists = data.value.results
+      this.pickUser()
     },
+    pickUser() {
+      this.user = this.lists.splice(0, 1)[0]
+      if (this.lists.length < 1) this.lists.push(...this.origin)
+    }
   },
   persist: true
 })

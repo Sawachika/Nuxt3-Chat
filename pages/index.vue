@@ -9,21 +9,22 @@
     round
     @click="useDialogStore().set({ login: true })"
   ) Create account
-.container.grid.gap-4.mx-auto.p-4.pt-16(v-else class="md:grid-cols-2")
-  img.aspect-square.object-fit.rounded-xl(:src="user.user?.photos[0].url" @error="$event.target.src = '/image/avatar.jpg'")
+.container.grid.gap-4.mx-auto.p-4.pt-16(v-else-if="user.user?.name" class="md:grid-cols-2")
+  img.aspect-square.object-cover.object-top.w-full.rounded-xl(:src="user.user?.photos[0].url" @error="$event.target.src = '/image/avatar.jpg'")
   .flex.flex-col.gap-4.aspect-square
-    p
-      span {{ user.user.name }},
-      span.ms-2 {{ moment().diff(moment(user.user.birth_date), 'years') }}
-    p {{ user.user.bio }}
+    ElDescriptions(:title="user.user.name" :column="1")
+      ElDescriptionsItem(label="Age") {{ moment().diff(moment(user.user.birth_date), 'years') }}
+      ElDescriptionsItem(v-if="user.user.bio" label="Bio") {{ user.user.bio }}
+      ElDescriptionsItem(v-if="user.user.schools.length" label="School") {{ user.user.schools.map(({ name }) => name).join() }}
+      ElDescriptionsItem(v-if="user.distance_mi" label="Distance") {{ user.distance_mi }} mile
     .interact.inline-grid.grid-cols-3.place-items-center.gap-8.mt-auto.mx-auto
-      .grid.justify-items-center.gap-2.cursor-pointer(@click="pass(user.user._id)")
+      .grid.justify-items-center.gap-2.cursor-pointer(@click="pass(user.user._id, user.user.name)")
         Icon.text-red(name="material-symbols:close-rounded")
         span Skip
-      .grid.justify-items-center.gap-2.cursor-pointer(@click="like(user.user._id)")
+      .grid.justify-items-center.gap-2.cursor-pointer(@click="like(user.user._id, user.user.name)")
         Icon.text-green(name="material-symbols:check-rounded")
         span Like
-      .grid.justify-items-center.gap-2.cursor-pointer(@click="superLike(user.user._id)")
+      .grid.justify-items-center.gap-2.cursor-pointer(@click="superLike(user.user._id, user.user.name)")
         Icon.text-blue(name="material-symbols-light:favorite-rounded")
         span Super Like
 </template>
@@ -32,26 +33,25 @@
 import moment from 'moment'
 const isLoading = ref(true)
 const userStore = useUserStore()
-const { origin, lists } = storeToRefs(useRecommendStore())
-const user = ref({})
+const recommendedStore = useRecommendStore()
+const { user } = storeToRefs(recommendedStore)
+const { $toast } = useNuxtApp()
 
 onMounted(() => isLoading.value = false)
-if (userStore.token) nextUser()
-function nextUser() {
-  user.value = lists.value.splice(0, 1)[0]
-  if (lists.value.length < 1) lists.value.push(...origin.value)
-}
-async function pass(id: string) {
+async function pass(id: string, name: string) {
   const { data } = await useApi(`/pass/${id}`)
-  nextUser()
+  $toast.info(`Skip ${name}`)
+  recommendedStore.pickUser()
 }
-async function like(id: string) {
+async function like(id: string, name: string) {
   const { data } = await useApi<{ match: boolean }>(`/like/${id}`)
-  nextUser()
+  $toast.success(`Like ${name}`)
+  recommendedStore.pickUser()
 }
-async function superLike(id: string) {
+async function superLike(id: string, name: string) {
   const { data } = await useApi(`/like/${id}/super`, { method: 'POST' })
-  nextUser()
+  $toast.success(`Super like ${name}`)
+  recommendedStore.pickUser()
 }
 </script>
 

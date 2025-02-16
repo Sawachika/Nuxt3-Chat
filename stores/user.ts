@@ -7,12 +7,15 @@ type ResponseLogin = {
   refresh_token: string
   validated: boolean
 }
+type User = {
+  age_filter_min: number
+  age_filter_max: number
+  photos: { url: string }[]
+  pos: object
+}
 type RequestProfile = {
   account: object
-  user: {
-    age_filter_min: number
-    age_filter_max: number
-  }
+  user: User
 }
 
 export const useUserStore = defineStore('User', {
@@ -23,7 +26,7 @@ export const useUserStore = defineStore('User', {
       user: {
         age_filter_min: 0,
         age_filter_max: 0,
-      },
+      } as User,
     },
   }),
   actions: {

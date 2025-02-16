@@ -18,8 +18,9 @@ header.fixed.flex.gap-4.w-full.p-4
   ) Log in
 DrawerMenu(v-model="visibleMenu")
 DialogLogin
-DialogProfile
-DialogSettings
+template(v-if="userStore.token")
+  DialogProfile
+  DialogSettings
 </template>
 
 <script setup lang="ts">

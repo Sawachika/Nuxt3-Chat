@@ -7,7 +7,6 @@ ElDialog(
 )
   .grid.gap-4
     p.text-2xl.text-center Log in with
-    ElButton(size="large" round) Facebook
     ElButton(size="large" round @click="dialogStore.set({ login: false, sms: true })") SMS
 ElDialog(
   v-model="dialogStore.sms"
@@ -83,6 +82,7 @@ async function getVerificationCode() {
   const { data } = await useApi('/v2/auth/sms/send', { method: 'POST', body: {
     phone_number: `${form.region}${form.phone_number}`,
   } })
+  form.otp_code = ''
   code.value = data
   lockResend()
 }
