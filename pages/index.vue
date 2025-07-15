@@ -35,21 +35,21 @@ const isLoading = ref(true)
 const userStore = useUserStore()
 const recommendedStore = useRecommendStore()
 const { user } = storeToRefs(recommendedStore)
-const { $toast } = useNuxtApp()
+const { $api, $toast } = useNuxtApp()
 
 onMounted(() => isLoading.value = false)
 async function pass(id: string, name: string) {
-  const { data } = await useApi(`/pass/${id}`)
+  const [res] = await $api(`/pass/${id}`)
   $toast.info(`Skip ${name}`)
   recommendedStore.pickUser()
 }
 async function like(id: string, name: string) {
-  const { data } = await useApi<{ match: boolean }>(`/like/${id}`)
+  const [res] = await $api<{ match: boolean }>(`/like/${id}`)
   $toast.success(`Like ${name}`)
   recommendedStore.pickUser()
 }
 async function superLike(id: string, name: string) {
-  const { data } = await useApi(`/like/${id}/super`, { method: 'POST' })
+  const [res] = await $api(`/like/${id}/super`, { method: 'POST' })
   $toast.success(`Super like ${name}`)
   recommendedStore.pickUser()
 }

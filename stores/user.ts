@@ -52,8 +52,8 @@ export const useUserStore = defineStore('User', {
       if (data.value) this.profile = data.value
     },
     async updateProfile(body: object) {
-      const { data } = await useApi<RequestProfile>('/v2/profile', { method: 'POST', body })
-      if (data.value) this.profile = { ...this.profile, ...data.value }
+      const [res] = await this.$api<RequestProfile>('/v2/profile', { method: 'POST', body })
+      if (res) this.profile = { ...this.profile, ...res }
     },
   },
   persist: {

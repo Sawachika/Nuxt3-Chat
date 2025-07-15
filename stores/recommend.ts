@@ -10,10 +10,10 @@ export const useRecommendStore = defineStore('Recommend', {
   }),
   actions: {
     async getLists() {
-      const { data } = await useApi<Request>('/v2/recs/core')
-      if (!data.value) return
-      this.origin = [...data.value.results]
-      this.lists = data.value.results
+      const res = await useUniversalApi<Request>('/v2/recs/core')
+      if (!res) return
+      this.origin = [...res.results]
+      this.lists = res.results
       this.pickUser()
     },
     pickUser() {
